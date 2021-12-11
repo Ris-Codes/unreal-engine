@@ -74,6 +74,20 @@ Responsibilities in Unreal Engine
 
 A look at the player character Blueprint that’s already there before we start playing around with some movement variables.
 
+Here are some most common variables that you need to know
+![Most-Common-Variables](images/most-commmon-variables.png)
+
+Now open UNREAL ENGINE and go to first person template. 
+![first-person-template](images/first-person-template.png)
+
+
+Look for First Person Character Blueprint in the **content browser** OR just locate your asset by clicking on it and press **Ctrl+B** , it will take you directly to the asset in the content browser.
+You can find it named BP_FirstPersonCharacter.
+![first-person-character-blueprint](images/first-person-character-blueprint.png)
+
+By double clicking on the BP_FirstPersonCharacter asset, you can enter into the character blueprint, where you can see the **EVENT GRAPH , CONSTRUCTION SCRIPTS , VIEWPORT , COMPONENTS , FUNCTIONS , VARIABLES , DETAILS PANEL** , etc...
+
+
 
 ---
 ## Changing Component Variables
