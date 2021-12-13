@@ -51,7 +51,7 @@ What You Will Learn :
 - How to use Timelines
 - The basics of UMG
 ----  
-## What Is a Gameplay Designer ?
+## What Is a Gameplay Designer
 -[Toc](#table-of-content)
 
  The responsibilities of a gameplay designer and what is expected of them on a beginner level in the team.
@@ -93,7 +93,71 @@ By double clicking on the BP_FirstPersonCharacter asset, you can enter into the 
 ## Changing Component Variables
 -[Toc](#table-of-content)
 
+ In this topic we ,
+   - Create our own Variables
+   - Change variables on Begin play
+     - Show comment functionality
+     - Show editable variables
+   - Level instance settings
+     -Saving the level instance settings to your character
 
+Here our goal is to overide Maximum walk speed and Jump Height with our on New variables.
+
+Goto *First person player character*
+We want to replace the variables that are part of **CharacterMovement** component. 
+
+![CharacterMovement](images/CharacterMovement.png) 
+
+Drag and Drop the **CharacterMovement** component to the Event Graph to get the reference ![CharacterMovementReference](images/CharacterMovementReference.png).
+
+Drag  from the reference to **SET** or **GET** variables from the components. Look for *max walk speed* , you will get a **Get Max Walk Speed** and a **Set Max Walk Speed**. Select the **Set Max Walk Speed**. This will now overide the value of the variable in this component.
+![CharacterMovementAction](images/CharacterMovementAction.png) 
+
+Now we want to do the same for JUMPING HEIGHTS.Look for **set jump z velocity** to overide the variable. 
+![SetJumpZVelocity](images/SetJumpZVelocity.png)
+We want the jump overide to happen after we overidden the *max walk speed*. ![linking1](images/linking1.png)
+
+What happened now is , we have set the both variables to *zero*. Now we are going to create our on variables.
+Goto **Blueprint** tab, under that, goto **Variables** tab and click on the *add variable* button.
+
+![AddingNewVariable](images/AddingNewVariable.png)
+
+Name the New variable as **FP_MaxWalkSpeed** (FP stands for First Person). Click on Enter and goto the **Details** panel.
+Change the *Variable Type* from **Boolean** to **float**. To Edit the **DEFAULT VALUE** , you need to *compile* the code first. Now lets try changing the default value to 500 and then compile and save the same.
+![FPMaxWalkSpeedDetailsPanel](images/FPMaxWalkSpeedDetailsPanel.png)
+
+We have another method of creating a new variable. We can do it on *Max jump height*.
+
+![AddingNewVariable1](images/AddingNewVariable1.png)
+
+Right click on the *Green Node* near the **Jump Velocity** in the  **set jump z velocity** and click on **Promote to Variable**.
+This will add a New variable and set its **Variable Type** automatically (Float in this case).
+Now name the newly created variable as **FP_MaxJumpHeight**. Compile and set its Default value to 500. 
+Value of Jump height would be now changed, but still you can see that value of Max walk speed is *zero*.
+Goto the Variables tab and Drag **FP_MaxWalkSpeed** to the Event Graph. You can see a **GetFP_MaxWalkSpeed** and a **SetFP_MaxWalkSpeed**, select the **GetFP_MaxWalkSpeed** and connect it the node with **Max walk speed**. 
+
+![GetFP_MaxWalkSpeed](images/GetFP_MaxWalkSpeed.png)
+
+    You can hold Ctrl and Drag to get a GET variable
+    and hold Alt and Drag to get a SET variable automatically.
+
+Now we have just created some variables and nothing is there which is going to make this happen. The variables are never being called , they are just hovering in the Event Graph. We want them to happen as soon as the game starts. We need an Event for that.
+Right click in the Event graph and look for the event **EventBeginPlay**.
+![EventBeginPlay](images/EventBeginPlay.png)
+
+Connect it to  **Set Max Walk Speed**. Now , as soon as the game starts , we overide the  **Max Walk Speed** with the new variable and we overide the **Jump z velocity** with the other new variable.
+
+Even though the variables are responding, you won't be able to change them on the level instance over actor. It is because the variables that you made are not made to be public.
+Goto the Blueprint tab on the First person player character and click on the *eye* icon to make it public. Now you would be able to make it public and it would be editable in the instance of the blueprint.
+
+![MakePublic](images/MakePublic.png)
+
+
+    Another method to make variable Public is to check tick mark on the INSTANCE EDITABLE in the DETAILS panel.
+
+The next thing you would have to do is to make your EVENT GRAPH neat and clean. Select all the newly crated Events and variables and press **C** to **comment** it. Rename it and give a brief description. Here , we can name it as **Beginplay - Set movement variables**. Goto the details Panel and give a colour to recognise the Beginplay easily.
+
+![comment](images/comment.png)
 
 ---
 
