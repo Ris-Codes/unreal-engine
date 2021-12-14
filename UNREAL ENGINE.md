@@ -218,7 +218,49 @@ Now back to the Event Graph and select the changes we made to **comment** it out
 
 -[Toc](#table-of-content)
 
+ - Adding a new input to Project Settings
+ - Using the new input in **First Person Character**
+ - Setting up logic to adjust the speed for when the input is pressed and released.
 
+To add a new input, goto the **Project Settings** and then under **Engine** click on **input**.
+On **input**, you can see **Bindings**.
+You will get **action mapping** and **axis mapping**.
+Under **action mapping**, you will see *jump, fire* and *resetVR*. Click on the '+' button on **action mapping** to add a new input.
+
+![AddInput](images/AddInput.png)
+
+Rename the input to ***Sprint*** and assign keys to it by clicking '+' button next to it. Assign *left shift* key for it, or any other as if you are comfortable or may be multiple keys.
+
+![SprintKeyAssign](images/SprintKeyAssign.png)
+
+Goto the **First Person Character** Blueprint editor Event Graph and Right click and search for the event **Sprint**. You will be able to see the **InputAction Sprint**, having a **Pressed** and a **Released** actions.
+
+![InputActionSprint](images/InputActionSprint.png)
+
+Now you need the Character movement to happen. So, drag the **CharacterMovement** component and bring out **Set Max Walk Speed** from it for both  **Pressed** and **Released** and link them.
+
+![SprintCharMovement](images/SprintCharMovement.png)
+
+Make sure you have variable to change the speed. For that, you can goto **FP_MaxWalkSpeed** in the variables tab and *Duplicate* it and rename it as **FP_MaxSprintSpeed** and then compile and save to change the values.
+
+![DuplicateFPMaxWalkSpeed](images/DuplicateFPMaxWalkSpeed.png)
+
+    You can use Ctrl + W to duplicate. 
+
+Select the **FP_MaxSprintSpeed** and goto the details panel and change the default value to 800. Compile and save.
+
+Drag the variable **FP_MaxSprintSpeed** by holding **Ctrl** to get a *Get variable* to the Event Graph and connect it to the  **Set Max Walk Speed** while **Pressed** and drag **FP_MaxWalkSpeed** by holding Ctrl and connect it to the **Set Max Walk Speed** while **Released**. Compile and save and play.
+
+![sprint](images/sprint.png)
+
+It might be a good idea to keep track of the fact that if we are sprinting or not. So we want to create a new variable for that and that would be a **Boolean**. Add a new variable and name it as **IsSprinting**, as we need to know whether the character is sprinting or not.
+
+![IsSprinting](images/IsSprinting.png)
+
+You can keep it not editable for the level instance. 
+Drag **IsSprinting** by holding **Alt** to get a **SET variable**. Drag one more copy of it to connect it up for both **Pressed** and **Released**. Give a check mark for **IsSprinting** in the **Pressed** and leave the **IsSprinting** in the **Released** as it is. Select the New changes that you have made and comment it down. Compile and Save.
+
+![CommentedSprinting](images/CommentedSprinting.png)
 
 ---
 ## Adding Crouch
