@@ -36,6 +36,7 @@ It is popular among PC and console games with high graphics capabilities and is 
 >## Blueprints And Gameplay For Game Designers
 ---
 ## Introduction To Course
+
 -[Toc](#table-of-content)
 
 What You Will Learn :
@@ -52,6 +53,7 @@ What You Will Learn :
 - The basics of UMG
 ----  
 ## What Is a Gameplay Designer
+
 -[Toc](#table-of-content)
 
  The responsibilities of a gameplay designer and what is expected of them on a beginner level in the team.
@@ -69,6 +71,7 @@ Responsibilities in Unreal Engine
 
 ---
 ## The First Person Character
+
 -[Toc](#table-of-content)
 
 
@@ -91,6 +94,7 @@ By double clicking on the BP_FirstPersonCharacter asset, you can enter into the 
 
 ---
 ## Changing Component Variables
+
 -[Toc](#table-of-content)
 
  In this topic we ,
@@ -111,11 +115,16 @@ We want to replace the variables that are part of **CharacterMovement** componen
 Drag and Drop the **CharacterMovement** component to the Event Graph to get the reference ![CharacterMovementReference](images/CharacterMovementReference.png).
 
 Drag  from the reference to **SET** or **GET** variables from the components. Look for *max walk speed* , you will get a **Get Max Walk Speed** and a **Set Max Walk Speed**. Select the **Set Max Walk Speed**. This will now overide the value of the variable in this component.
+
 ![CharacterMovementAction](images/CharacterMovementAction.png) 
 
-Now we want to do the same for JUMPING HEIGHTS.Look for **set jump z velocity** to overide the variable. 
+Now we want to do the same for JUMPING HEIGHTS.Look for **set jump z velocity** to overide the variable.
+
 ![SetJumpZVelocity](images/SetJumpZVelocity.png)
-We want the jump overide to happen after we overidden the *max walk speed*. ![linking1](images/linking1.png)
+
+We want the jump overide to happen after we overidden the *max walk speed*. 
+
+![linking1](images/linking1.png)
 
 What happened now is , we have set the both variables to *zero*. Now we are going to create our on variables.
 Goto **Blueprint** tab, under that, goto **Variables** tab and click on the *add variable* button.
@@ -124,6 +133,7 @@ Goto **Blueprint** tab, under that, goto **Variables** tab and click on the *add
 
 Name the New variable as **FP_MaxWalkSpeed** (FP stands for First Person). Click on Enter and goto the **Details** panel.
 Change the *Variable Type* from **Boolean** to **float**. To Edit the **DEFAULT VALUE** , you need to *compile* the code first. Now lets try changing the default value to 500 and then compile and save the same.
+
 ![FPMaxWalkSpeedDetailsPanel](images/FPMaxWalkSpeedDetailsPanel.png)
 
 We have another method of creating a new variable. We can do it on *Max jump height*.
@@ -143,6 +153,7 @@ Goto the Variables tab and Drag **FP_MaxWalkSpeed** to the Event Graph. You can 
 
 Now we have just created some variables and nothing is there which is going to make this happen. The variables are never being called , they are just hovering in the Event Graph. We want them to happen as soon as the game starts. We need an Event for that.
 Right click in the Event graph and look for the event **EventBeginPlay**.
+
 ![EventBeginPlay](images/EventBeginPlay.png)
 
 Connect it to  **Set Max Walk Speed**. Now , as soon as the game starts , we overide the  **Max Walk Speed** with the new variable and we overide the **Jump z velocity** with the other new variable.
@@ -162,13 +173,51 @@ The next thing you would have to do is to make your EVENT GRAPH neat and clean. 
 ---
 
 ## Experimenting With Variables At Runtime
+
 -[Toc](#table-of-content)
 
+We will add **DEBUG CONTROLS** that will allow us to change the variables while we play.
 
+Here for a reference, we are Dynamically changing the variables with scroll wheel up/down.
+We need the movement speed to go up , when we scroll the mouse wheel up and the movement speed to go down when we scroll the mouse wheel down.
+
+Right click on the Event Graph and search for **Mouse Wheel Up** and **Mouse Wheel Down**.
+
+![MouseWheel](images/MouseWheel.png)
+
+You can see **Pressed** and **Released** in both of them.
+We need a **Character Movement** to happen when the mouse wheel is **pressed** or **released** (Here we just need **pressed** to happen). So Drag the **CharacterMovement** component from the components tab. Set **Max walk speed** from it for both **Mouse Wheel Up** and **Mouse Wheel Down** and connect the **Max walk speed** to the **Pressed** in both.
+
+![MouseWheelPressed](images/MouseWheelPressed.png)
+
+Now we need to change the values. For that we need a **Get Max Walk Speed**. Drag a node from the **CharacterMovement** and search for **Get Max Walk Speed**. From the **Get Max Walk Speed**, drag a node and look for **float + float** to change the value when the wheel is scrolled up and **float - float** to change the value when the wheel is scrolled down. Change the float values to how much you want to increase or decrease the speed when scrolled. Lets take 100 for an example. 
+
+![MouseWheelValue](images/MouseWheelValue.png)
+
+Now compile and play to see the changes.
+You can see that the speed has been changing whenever you scrolls the mouse wheel, but you wont have any idea on how much the current speed is while playing. For that we need to **Print string** to feedback the information about speed to ourselves.
+
+Right click and search for **Print String** and connect it to the **Max walk speed**. To print back the information, connect the float with **Max walk speed** to the **String** in the **Print String**. Click the down arrow on the **Print String** and change the duration for how many seconds the string is to be displayed on the screen.
+
+![PrintString](images/PrintString.png)
+
+Do the same for **Mouse Wheel Down**. Then Compile and save.
+
+![PrintString1](images/PrintString1.png)
+
+Now play to see whether it is printing the speed on the screen or not. 
+
+![PlayScreen](images/PlayScreen.png)
+
+Now back to the Event Graph and select the changes we made to **comment** it out. Comment and describe the debug. Let it be **Debug - Change Movement Speed** and colour it down to recognise the debug (usually debugs are coloured in RED.)
+
+![DebugScroll](images/DebugScroll.png)
 
 ---
 ## Adding Sprint
+
 -[Toc](#table-of-content)
+
 
 
 ---
@@ -179,17 +228,20 @@ The next thing you would have to do is to make your EVENT GRAPH neat and clean. 
 
 ---
 ## Adding Health And Debug Damage
+
 -[Toc](#table-of-content)
 
 ---
 
 ## Widget Blueprint Introduction
+
 -[Toc](#table-of-content)
 
 
 ---
 
 ## Post Process Volumes
+
 -[Toc](#table-of-content)
 
 ---
@@ -201,6 +253,7 @@ The next thing you would have to do is to make your EVENT GRAPH neat and clean. 
 
 ----
 ## Opening On Overlap
+
 -[Toc](#table-of-content)
 
 ---
