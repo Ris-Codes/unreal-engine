@@ -1,7 +1,7 @@
 # EPIC GAMES - UNREAL ENGINE
 
 
->## Table of content
+>## Table of Content
 
   - [Introduction To Unreal Engine](#introduction-to-unreal-engine)
   - [Blueprints And Gameplay For Game Designers](#blueprints-and-gameplay-for-game-designers)
@@ -21,7 +21,7 @@
 
 # UNREAL ENGINE
 
--[Toc](#table-of-content)
+ -[Toc](#table-of-content)
 
 
 ## Introduction To Unreal Engine
@@ -37,7 +37,7 @@ It is popular among PC and console games with high graphics capabilities and is 
 ---
 ## Introduction To Course
 
--[Toc](#table-of-content)
+ -[Toc](#table-of-content)
 
 What You Will Learn :
 
@@ -54,7 +54,7 @@ What You Will Learn :
 ----  
 ## What Is a Gameplay Designer
 
--[Toc](#table-of-content)
+ -[Toc](#table-of-content)
 
  The responsibilities of a gameplay designer and what is expected of them on a beginner level in the team.
 
@@ -72,7 +72,7 @@ Responsibilities in Unreal Engine
 ---
 ## The First Person Character
 
--[Toc](#table-of-content)
+ -[Toc](#table-of-content)
 
 
 A look at the player character Blueprint that’s already there before we start playing around with some movement variables.
@@ -95,7 +95,7 @@ By double clicking on the BP_FirstPersonCharacter asset, you can enter into the 
 ---
 ## Changing Component Variables
 
--[Toc](#table-of-content)
+ -[Toc](#table-of-content)
 
  In this topic we ,
    - Create our own Variables
@@ -174,7 +174,7 @@ The next thing you would have to do is to make your EVENT GRAPH neat and clean. 
 
 ## Experimenting With Variables At Runtime
 
--[Toc](#table-of-content)
+ -[Toc](#table-of-content)
 
 We will add **DEBUG CONTROLS** that will allow us to change the variables while we play.
 
@@ -216,7 +216,7 @@ Now back to the Event Graph and select the changes we made to **comment** it out
 ---
 ## Adding Sprint
 
--[Toc](#table-of-content)
+ -[Toc](#table-of-content)
 
  - Adding a new input to Project Settings
  - Using the new input in **First Person Character**
@@ -265,38 +265,115 @@ Drag **IsSprinting** by holding **Alt** to get a **SET variable**. Drag one more
 ---
 ## Adding Crouch
 
--[Toc](#table-of-content)
+ -[Toc](#table-of-content)
 
+- Adding a new input to Project Settings
+- Using the new input to **First Person Character**
+- Introduction to **Timeline**
+  - Gradually change variables
+  - Update component locations
+
+Goto *project settings* and add a new input **Crouch** and assign keys to it. Let **C** and **Left Ctrl** be the crouching keys.
+
+![CrouchkeyAssign](images/CrouchkeyAssign.png)
+
+Now on the Event Graph, Right click and call the event **InputActionCrouch**. Assign **CharacterMovement** and **Max Walk Speed** when **Pressed** and **Released**.
+
+![InputActionCrouch](images/InputActionCrouch.png)
+
+Create a variable for maximum crouch speed. Duplicate the **FP_MaxSprintSpeed** in the variables tab and rename it as **FP_MaxCrouchSpeed**. Compile and Save and change the default value to 200.
+
+Drag the variable (**GET variable**) out and connect to the **Max Walk Speed** when **Pressed**. Compile , Save and Play to see the result.
+
+![GetFPMaxCrouchSpeed](images/GetFPMaxCrouchSpeed.png)
+
+But we would not be getting a smooth motion while crouching. So, inorder to get a smooth motion, we need to use the **Timeline**.
+Right click on the Event Graph and search for **Timeline** and Rename it as **T_Crouching**.
+
+![timeline](images/timeline.png)
+
+Assign it to **Play** while **Pressed** and **Reverse** while **Released** to get a smooth motion.
+
+![T_Crouching](images/T_Crouching.png)
+
+Double click on the **Timeline** to goto the **T_CrouchingTerminal**. You can see **Length** duration on it, it indicates how long we need to crouch down. Set the **Length** to 0.5 seconds.
+
+![TCrouchingTerminal](images/TCrouchingTerminal.png)
+
+We need to Gradually go from Value 1 to Value 2, for that we need to use a **Float Track** ![FloatTrackButton](images/FloatTrackButton.png) . Click on the **Float Track Button** and name it **Crouch_Alpha** (an Alpha is a value that usually goes from 0 to 1). When the time is 0, we need the value to be 0, Right click on 0 in the timeline and add value of 0 to it.
+
+![CrouchAlphaAddValue](images/CrouchAlphaAddValue.png)
+
+And after 0.5 seconds on the timeline add a value of 1, that is, we need the the crouch to be completed at 0.5 seconds. You can see a straight line from value 0 to 1.
+
+![Line0to1](images/Line0to1.png)
+
+To smooth it out, select both the points, Right click on any of the points, and change the **key interpolation** to **User**.
+
+![KeyInterpolation](images/KeyInterpolation.png)
+
+Compile and Save and go back to the Event Graph. You can see a new output appeared, **Crouch Alpha**. 
+
+To Crouch, we can either change the **Z** position of the **FirstPersonCamera** component by updating its **Set Relative Location** or a much better way to Crouch is to change the position of its **CapsuleComponent**. Updating the **FirstPersonCamera** component would not allow you to Crouch under obstacles. So, better way is to update the **CapsuleComponent** itself.
+
+Drag the **CapsuleComponent** into the Event Graph and look for **Set Capsule Half Height** in it. From the **Half Height**, get a **Lerp** and connect the **Alpha** in the **Lerp** to the **Crouch Alpha** in the **Timeline**. Change Default value (check the default value of Capsule component from details panel) of the **CapsuleComponent** from 96 (put the value in **A** in the Lerp) to 50 (put the value in **B** in the Lerp) to Crouch. Connect the **update** from the timeline to the **CapsuleComponent**. Compile and Save. 
+
+![CapsuleComponent](images/CapsuleComponent.png)
+
+Now we need to make sure that we can check that we are Crouching or not. So we can select **IsSprinting**, duplicate it and rename it as **IsCrouching**.
+
+![IsCrouching](images/IsCrouching.png)
+
+Hold **Alt** and Drag it out and set it as when we Crouch it need to be True and when we stop it need to be False. Compile and Save to see the output.
+
+![CrouchBoolean](images/CrouchBoolean.png)
+
+But, here, as we are Crouching, we can enable Sprinting. We don't want that to happen. For that, goto Event Graph and go for **Add Custom Event** to add a custom event. Name the Custom Event as **StopCrouching**. Connect it to the **IsCo=rouching False** boolean, that is, it do not Crouch.
+
+Go back to [Sprinting](#adding-sprint), which we already created and add a **Branch** in it.
+```
+Hold B on the keyboard and click to open a Branch or Right click and search for Branch
+```
+
+Connect **Branch** for both **Pressed** and **Released**. Drag a GET variable of **IsCrouching** and connect it to the **Condition** of both the **Branches**. So, when the Sprinting is True, connect a **Stop Crouching** event to it and when it is False, make it as Normal.
+
+![StopCrouching](images/StopCrouching.png)
+
+Now when we stop Crouching while we are Sprinting, it will still update the Maximum Movement Speed. So we would need to add another **Branch** in our **Crouch**. Add **IsSprinting** boolean to it and set as, when we stop Crouching, the input only has to happen if the Sprinting is False.
+
+![IsSprintingStopCrouch](images/IsSprintingStopCrouch.png)
+
+Compile, Save and Check the output by Playing.
 
 ---
 ## Adding Health And Debug Damage
 
--[Toc](#table-of-content)
+ -[Toc](#table-of-content)
 
 ---
 
 ## Widget Blueprint Introduction
 
--[Toc](#table-of-content)
+ -[Toc](#table-of-content)
 
 
 ---
 
 ## Post Process Volumes
 
--[Toc](#table-of-content)
+ -[Toc](#table-of-content)
 
 ---
 
 ## Creating The Door Parent
 
--[Toc](#table-of-content)
+ -[Toc](#table-of-content)
 
 
 ----
 ## Opening On Overlap
 
--[Toc](#table-of-content)
+ -[Toc](#table-of-content)
 
 ---
 ---
