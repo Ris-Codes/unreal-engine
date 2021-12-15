@@ -350,6 +350,38 @@ Compile, Save and Check the output by Playing.
 
  -[Toc](#table-of-content)
 
+- Create a health variable
+- Apply damage to Character using Debug Controls
+- Restarting the level when the health reaches 0
+
+Create a new *float variable* and Name it as **Health**. Compile and give its Default value as 100.
+
+![FloatHealth](images/FloatHealth.png)
+
+We are not going to edit the Blueprint instance, so, we can put the variable in the previous Debug we have made in [Experimenting With Variables At Runtime](#experimenting-with-variables-at-runtime). 
+
+![DebugScroll](images/DebugScroll.png)
+
+We can edit the comment and Remove the Description from it and comment it just **Debug**. Right click and add an input action for the key **P**, search for **P keyboard**.
+
+![PKeyboard](images/PKeyboard.png)
+
+**Get Health** variable and look for **Float - Float**. Select it and give a value of 10 to it, to subtract 10 health everytime when we press **P**.
+
+Now **Set Health** and connect to the **P Keayboard Pressed**. Connect the value node of health with the **Float - Float**. So that now we are updating the Health.
+
+![SetHealth](images/SetHealth.png)
+
+Now we need to check if our health is *zero* or *lower than zero*. Because, in a game there are instances where your health could be negative. So drag off the **Health** node in **Set health** and look for **<=**. It turns out to be a bool, so we need to add a **Branch**. Hold **B** and **Left Click** to add a **Branch** and link everything up.
+
+![BranchHealth](images/BranchHealth.png)
+
+If this is True, we want to Restart the level. So we can **Execute Console Command** to do it. And inside of **Execute Console Command** in the **Command** type ***RestartLevel*** to restart the level. Compile, Save and Play.
+
+![RestartLevel](images/RestartLevel.png)
+
+![HealthDebug](images/HealthDebug.png)
+
 ---
 
 ## Widget Blueprint Introduction
