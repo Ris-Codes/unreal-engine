@@ -388,6 +388,92 @@ If this is True, we want to Restart the level. So we can **Execute Console Comma
 
  -[Toc](#table-of-content)
 
+Here we will add a health-bar to our screen that will automatically stay up-to-date.
+
+In the Blueprints, **First Person Template** folder in the **Content Browser**, Right click and goto **User interface** and **widget Blueprint**. Name it as **WB_HealthBar** (we are going to create a health-bar).
+
+![CreateWidget](images/CreateWidget.png)
+
+Open it up and look for **Horizontal Box** in the **Palette** tab as we need an **Horizontal box** for the **Health-Bar** and a text with it.
+
+![PaletteHorizontalBox](images/PaletteHorizontalBox.png)
+
+Drag it down to the graph, and resize it if you need.
+
+![HorixontalBar](images/HorixontalBar.png)
+
+In the **Palette** bar, drag the **text** under the **Common** and drop it on the **Horizontal Box** in the **Hierarchy**. Also drag a **Progress Bar** from the **Common** and drop it on the **Horizontal Box**.
+
+![DragTextAndProgressBars](images/DragTextAndProgressBars.png)
+
+Click on the **Text Bar** and you can see the Details panel. You can make necessary changes you need. Here we are going to change the name of the text to "**Health:** " and in the **Fonts**, we change the **Outline Settings**, *Outline size* to 1 and *Font Size* to 15. Compile and Save.
+
+![HealthOutlineSettings](images/HealthOutlineSettings.png)
+
+You can see the **Progress Bar** is small. Click on it and goto the **Details Panel** and in the **Slot Settings**, change the **Size** to **Fill**.
+
+![SlotSizeFill](images/SlotSizeFill.png)
+
+Do a **Vertical Allignment** to center, which will make it smaller vertically. Also change the Dimensions of the **Horizontal Box**, which would also change the dimensions of the **Health Bar**.
+
+![HealthBar](images/HealthBar.png)
+
+Click on the **Progress Bar** and on the Details panel, you can change the *percentage, color, style, etc...*  of the **Progress Bar**. You can change the Default color into green by setting the **Progress** percentage to 1 and then changing the **Fill color and opacity** in the **Appearance** to green.
+
+![ProgressBarAppearance](images/ProgressBarAppearance.png)
+
+Now you can goto the Graph to make the **WIDGET BLUEPRINT**. 
+
+![WidgetGraph](images/WidgetGraph.png)
+
+You need access to the Health and you need to be able to update Health. So you need to create a custom event, Right click and look for **Add Custom Event**. Name it as **UpdateHealthBar**.
+
+![UpdateHealthBar](images/UpdateHealthBar.png)
+
+Now we need a players health to update the Health Bar. So, in the **Details Panal**, by **UpdateHealthBar** selected, in the **Inputs** add a new input, **NewParameter**, which will add a Boolean automatically. Change the parameter from Boolean to Float. Rename **NewParameter** to **Health**.
+
+![NewParameter](images/NewParameter.png)
+
+Now the **Progress Bar** goes from 0 to 1, we have a maximum health of 100, so that would be 1. So our **current health**, we can divide by our **maximum health** in order to get its percentage going from 0 to 1. So, Drag of from **Health** node and go for **float / float** and divide it by 100.
+
+![HealthFloatByFloat](images/HealthFloatByFloat.png)
+
+Then we have a reference our **Progress Bar** on **Variables** tab in **My Blueprint** Panel.  Drag it down to the graph and do a **Get** variable. Then call **Set Percent** from it. So we could update the percentage of the **Progress Bar**. Connect the **UpdateHealthBar** and **Health** in it to the **Percent**. 
+
+![ProgressBarSetPercent](images/ProgressBarSetPercent.png)
+
+Now we need to see what the percentage is like. We need to change the colour of the **Progress Bar** depending on the health. So, call **Set Fill Color and Opacity** function from the **Progress Bar**, connect it to the percentage and add a **Select** function from it under **Utilities**.
+
+![InColorSelectUtility](images/InColorSelectUtility.png)
+
+We need to create a new rule now. Get from the Health and go for **float < float**. So that, if our Health is smaller, the colour changes. Let's do it for less than 50%. Connect it to the **Select Utility** and set the colour as Red if it's True and Green if False. Comment out the code as **Update Health Bar**, clear the preset nodes in the graph which are not used now, Compile and save.
+
+![CommentUpdateHealthBar](images/CommentUpdateHealthBar.png)
+
+Go back to our **First Person Player Character** Blueprint to start our Widget. We need to do it on the **BeginPlay**. On **BeginPlay**, we want to create a widget, which is called **Create Widget**. Set its class to our widget **WB_HealthBAr**.
+
+![BeginPlayCreateWidget](images/BeginPlayCreateWidget.png)
+
+We need the widget to be added to the viewport. Go for **Add to Viewport** function to add it to the viewport.
+
+![AddToViewport](images/AddToViewport.png)
+
+We also need a reference to our Health Bar widget. Right click on the **Return Value** of the widget and click **Promote to variable** and name ith **WB HealthBar**. Now we have a reference to it, so that we can make changes to it by calling events.
+
+![PromoteToVariables](images/PromoteToVariables.png)  
+
+![VariableWBHealthBar](images/VariableWBHealthBar.png)
+
+Now goto Debug section, which is the onnly place right now where we take damages.
+
+Go for a **GET Health Bar** before the Branch takes place in the Debug and call **Update HealthBar** from it. Place it in Between and feed in the new health into the **Update HealthBar**.
+
+![DebugHealthBar](images/DebugHealthBar.png)
+
+Compile, Save and play to check the Health bar. Press **P** to see if it is reducing and changing its colours.
+
+![HealthOnViewport](images/HealthOnViewport.png)
+
 
 ---
 
