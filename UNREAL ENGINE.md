@@ -481,6 +481,25 @@ Compile, Save and play to check the Health bar. Press **P** to see if it is redu
 
  -[Toc](#table-of-content)
 
+- Specific settings for lower Health
+- Use blend weight to gradually have the screen change to black and white.
+
+Goto **First Person Character**, add a **PostProcess** component and compile.
+
+![AddPostProcessComponent](images/AddPostProcessComponent.png)
+
+With the **PostProcess** component selected, on the details panel, change the **Priority** to 1. This would give it a higher priority. Set the **Blend Weight** to 0, so by default it is not enabled. **Blend Weight** determines how much it should be applied to the scene. Put **Saturation** to 0, this would drain all the colours from the scene, then use the **Blend Weight** to update how heavy it is being applied to the scene.
+
+![PriorityAndSaturation](images/PriorityAndSaturation.png)
+
+Just as we updated our **Health Bar**, we want to update our **Post Process Volume's Blend Weight**. Goto the **Debug** and before the Branch, as we have done previously on [Widget Blueprint Introduction](#widget-blueprint-introduction) and **GET** a **Post Process** reference to it and go for **Set Blend Weight**. Make sure it is connected.
+
+![GetPostProcess](images/GetPostProcess.png)
+
+We can use a new function, **Map Range Clamped** instead of dividing the *current value* with the *maximum value*, which we did previously for getting percentsge. In the **Map Range Clamped**, you will have four numbers to be filled in, **In Range A, In Range B, Out Range A and Out Range B**. We have a range of going from **In Range A** to **In Range B**, let's start it when the Health is 70% (better to go with reduced health rather than going with 100%) and end the **Saturation** when it reaches about 20% of the Health. We do not want the **Post Process** to happen if we have the full Health, So put the **Out Range A** to 0 itself and we need the **Post Process** to be in full effect when our Health goes below 20, so , put the **Out Range B** to 1. Compile, Save and Play.
+
+![MapRangeClamped](images/MapRangeClamped.png)
+
 ---
 
 ## Creating The Door Parent
