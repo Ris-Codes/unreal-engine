@@ -506,6 +506,49 @@ We can use a new function, **Map Range Clamped** instead of dividing the *curren
 
  -[Toc](#table-of-content)
 
+- Create a door parent actor
+- Create a parent with the door opening functionality so we can do the rest in child actors
+- Two custom events that feed into a play and rreverse timeline, then change the relative rotation on the door on that timeline
+
+Goto the Blueprints folder and create a new folder called **Doors**. Inside **Doors**, Right click and create a **Blueprint Class**.
+
+![CreateBlueprintClass](images/CreateBlueprintClass.png)
+
+Select the **Actor** as the base and name it as **BP_Door_Parent**.
+
+![BPDoorParent](images/BPDoorParent.png)
+
+Open the **BP_Door_Parent**.
+
+![OpenBPDoorParent](images/OpenBPDoorParent.png)
+
+Now we need to add mesh into it. So, go for **Static Mesh** in the **Components**. Call it as **DoorFrame** and duplicate it or create a new **Static Mesh** and call it as **Door**. Compile and Save it.
+
+![AddStaticMesh](images/AddStaticMesh.png)
+
+Select the **DoorFrame** and goto Details panel and in the **Static Mesh**, look for **SM_DoorFrame**. Do the same for **Door**, select it and get a mesh **SM_Door**.
+
+![DoorAndFrameMesh](images/DoorAndFrameMesh.png)
+
+Now we need the Door to open and close. For that, goto the Event Graph, remove the unwanted preset events from it and add a **Custom Event** called **OpenDoor**.
+
+![OpenDoor](images/OpenDoor.png)
+
+Create another **Custom Event** for **CloseDoor** too.
+
+Now we can add a **Timeline** and call it **DoorAnimation**. When **OpenDoor** starts, we will **Play** and for **CloseDoor**, we will **Reverse**. 
+
+![DoorTimeline](images/DoorTimeline.png)
+
+Enter the **Timeline**, set the Animation Length, 0.75 sec would be fine. Add a new **FloatTrack** and add a point at 0 and put the value 0. Add another point on 0.75 and put the value to 1. Select both the points and put the **Key Interpolation** to **User** to smoothen the animation. Compile and Save.
+
+![DoorAlpha](images/DoorAlpha.png)
+
+Back on the Event Graph, we need to **Update** the relative rotation of the **Door**. Grab the reference of the **Door** to the Event Graph and do a **Set Relative Rotation**. Connect **Update** to **Set Relative Rotation**. Also call a **Lerp Rotator** so that you would get an option to select the shortest path by checking tick mark on the **Shortest Path** option. It will prevent from rotating along the wrong side. Connect the **Door Alpha** with **Alpha** and **Z** rotation value from 0 to -110, that is, value of **Z** in **A** to be 0 and **B** to be -110, so that we would get a rotation of -110 degrees along the **Z** axis. 
+
+Select all and Comment it down as **Door Animation**. Compile and Save.
+
+![CommentDoorAnimation](images/CommentDoorAnimation.png)
 
 ----
 ## Opening On Overlap
