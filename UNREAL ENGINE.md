@@ -555,6 +555,46 @@ Select all and Comment it down as **Door Animation**. Compile and Save.
 
  -[Toc](#table-of-content)
 
+- Create your First Child Blueprint
+  - Add an overlap component
+  - Call parent behavior on overlap
+  - Add a check to make sure it's the player character that's overlapping
+
+Before creating the Door Child, goto **BP_Door_Parent**, and in the viewport, select **DefaultSceneRoot** in the components. In the Details panel, transform its size **Y** to 1.5 and **Z** to 1.3 to make the door little more larger that a Player could enter through it.
+
+Now back into the folder, Right click on **BP_Door_Parent** and **Create Child Blueprint Class**.
+
+![CreateChildBlueprintClass](images/CreateChildBlueprintClass.png)
+
+Rename it as **BPC_Door_Overlap** and open it up. We want the Door to be open when the Player overlaps or gets close to it. We need a **Collision** component for that. Goto component and look for **Box Collision**.
+
+![AddBoxCollision](images/AddBoxCollision.png)
+
+Resize the shape of the Box in the Details panel. Change the **Box extent** in the **Shape** tab as **X = 400**, **Y = 250** and **Z = 200** (values are adjusted as per your view on from where you need to make overlap).
+
+![ShapeBoxExtent](images/ShapeBoxExtent.png)
+
+Now while scrolling down the Details panel, you can see Events. Click on the **+** sign with **On Component Begin Overlap** to create an Event.
+
+![OnComponentBeginOverlap](images/OnComponentBeginOverlap.png)
+
+Click on the **Box** component and add **On Component end Overlap**. So that now we have two Events, one for the Beginning and one for the End.
+
+![OnComponentBeginAndEndOverlap](images/OnComponentBeginAndEndOverlap.png)
+
+We need the door to open only when our Player Character enter and not any other **Pawn**. Drag on the **Other Actor** in the begin overlap and do a **Equal(Object)** and call a **Get Player Character** and connect them.
+
+![EqualGetPlayerCharacter](images/EqualGetPlayerCharacter.png)
+
+Now we need a **Branch**, click the Event Graph and hold **B** for that. Connect it with **On Component Begin Overlap** and its **Condition** with the **Equals**. When the **Begin overlap** is true, we need the  door to open, for that, from the **True** in the branch, get a **Open Door**. Do the same method to close the door on **On Component End Overlap**. Comment all of it as **Overlap - Open and Close Door**.
+
+![CommentOverlapOpenAndCloseDoor](images/CommentOverlapOpenAndCloseDoor.png)
+
+Compile and Save and go back to the player viewport and drag the **BPC_Door_Overlap** into it. Place it accordingly as you could see it including the volume. Save it and play to see its working or not.
+
+![PreviewBPCDoorOverlap](images/PreviewBPCDoorOverlap.png)
+
+
 ---
 ---
 ***KEEP LEARNING***
