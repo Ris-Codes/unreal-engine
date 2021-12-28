@@ -17,6 +17,7 @@
      - [Post Process Volumes](#post-process-volumes)
      - [Creating The Door Parent](#creating-the-door-parent)
      - [Opening On Overlap](#opening-on-overlap)
+     - [Opening by Interacting with Another Actor](#opening-by-interacting-with-another-actor)
 ---
 
 # UNREAL ENGINE
@@ -594,8 +595,63 @@ Compile and Save and go back to the player viewport and drag the **BPC_Door_Over
 
 ![PreviewBPCDoorOverlap](images/PreviewBPCDoorOverlap.png)
 
-
 ---
+## Opening by Interacting with Another Actor
+
+ -[Toc](#table-of-content)
+
+- Create a new actor that will serv as our pressure plate
+- Assign a door in our level to open when standing on top of this actor
+
+Instead on making a child blueprint of the parent, **BP_Door_Parent**, create a new blueprint actor (**Right click → Blueprint Class → Actor**) and call it **Bp_PressurePlate**. Double click on it to open it up.
+
+Add a **Static Mesh** component as done before and name it **PressurePlate**. Set the Mesh to a **Cube** and Scale it's **Z** value to **0.1** and Compile.
+
+![PressurePlateMeshSize](images/PressurePlateMeshSize.png)
+
+Add new **Box Collision** and adjust it's size and position according to the Cube mesh.
+
+![PressurePlateBoxCollision](images/PressurePlateBoxCollision.png)
+
+On the Details panel, in the Collision, set the Collision Preset as **OverlapAllDynamic** and enable **Generate Overlap Events** ✅.
+
+This way, anything Dynamic we throw on top of it with **Generate Overlap Events** enabled would create an overlapping event. Compile and Save.
+
+Now create a **Begin overlap** and an **End overlap** as previously created on [Opening On Overlap](#opening-on-overlap).
+We need to open the door when overlaps (You cant find our previously created **Open Door** event here, as we are not in the same parent), we need a reference to a door. We can do that by making a new variable, call it **Door_Reference**, and in the Details panel, change its variable type to **BP_Door_Parent** and set it as an **Object Reference** and the same needed to be editable, (Instance Editable ✅).
+
+![DoorReference](images/DoorReference.png)
+
+Compile and Save it.
+
+Hold Ctrl and Drag out the **Door Reference** into the graph so that we get a reference and now call the **Open Door**.
+
+![PressurePlateOpenDoor](images/PressurePlateOpenDoor.png)
+
+But, we can't just call **Close Door** when the overlap stops. That is, if we walk away from the Pressure Plates, the door would close. So, what we need to do here is, Drag a reference of the **Box** into the graph and do a **Get Overlapping Actors** and set its **Class filter** as **Actor**.
+
+![GetOverlappingActors](images/GetOverlappingActors.png)
+
+This would return you an Array, a list of all the actors that are currently overlapping. But we just need to know that, if the first result is a valid result or not, because, if the first result is not valid, then we know that we can close the door. So we can **Get(a copy)** to get the first one in the list. But the first one in most cases would be the Actor itself, so set its value to 1 (first would be 0 and the next would be 1 in an array) and then go for "**? Is valid**" and connect it with **On Component End Overlap** to get an Event.
+
+![GetOverlappingActorsIsValid](images/GetOverlappingActorsIsValid.png)
+
+And if it is not valid, we will close the door. Connect **Close Door** from the **Door Reference**. Compile and Save.
+
+![PressurePlateCloseDoor](images/PressurePlateCloseDoor.png)
+
+Place a new **BP_Door_Parent** into the scene and the **BP_Pressure_Plate**. position the Pressure Plate as if the Cubes are near to it so that it could get pressed if the cubes fall on it.
+
+![PressurePlateAndDoorPlaced](images/PressurePlateAndDoorPlaced.png)
+
+Now in the Details Panel, we need to set the **Door Reference** to **BP_Door_Parent**. If you set a refernce variable to a parent, you can also get access to all of its children.
+
+![SetDoorReference](images/SetDoorReference.png)
+
+Select the Cubes and enable **Generate Overlap Events** ✅ to them, so that they cuold generate ovelapping events. Play it to see if it works.
+
+![PressurePlateGameView](images/PressurePlateGameView.png)
+
 ---
 ***KEEP LEARNING***
 ---
