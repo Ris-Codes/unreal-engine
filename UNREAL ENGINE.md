@@ -18,6 +18,7 @@
      - [Creating The Door Parent](#creating-the-door-parent)
      - [Opening On Overlap](#opening-on-overlap)
      - [Opening by Interacting with Another Actor](#opening-by-interacting-with-another-actor)
+     - [Opening On Interact](#opening-on-interact)
 ---
 
 # UNREAL ENGINE
@@ -651,6 +652,61 @@ Now in the Details Panel, we need to set the **Door Reference** to **BP_Door_Par
 Select the Cubes and enable **Generate Overlap Events** ✅ to them, so that they cuold generate ovelapping events. Play it to see if it works.
 
 ![PressurePlateGameView](images/PressurePlateGameView.png)
+
+---
+## Opening On Interact
+
+ -[Toc](#table-of-content)
+
+- Create a new child blueprint of Door Parent
+- Enable input to the door
+- Open the door when a certain button is pressed
+
+Take **BPC_Door_Overlap**, instead of creating a child blueprint, we will duplicate it and call it **BPC_Door_Interact** and open it up.
+
+What we are going to do now is, enable the input on the door when our player approaches and there will have an *interaction event* triggered to open the door. So, we need to get an **Interaction Event** or **input**. Goto **Project Settings** → **Engine** → **Input** → **Action Mapping** and add a new action mapping. Name it as **Interact** and set **E** as the keyboard key.
+
+![ActionMappingInteract](images/ActionMappingInteract.png)
+
+Now we can go back to the door and say **Interact**.
+
+![InputActionInteract](images/InputActionInteract.png)
+
+But when we press **E** on the keyboard, this would never happen. We need to enable input on this actor. So, in the **Overlap - Open and Close Door** session, where we have been already specifically checking the player character and nobody else could trigger it. Now go for  **Enable input** and we have a **Target**, which is **Self**, and a **Player Controller**. For the **Player Controller**, do a **Get Player Controller**. The Player Controller is a thing that processes all your player inputs, so it's also the one everything to the player character. Delete the **Open Door** from the **Branch** and connect the **Branch** with **Enable Input**.
+
+![GetPlayerController](images/GetPlayerController.png)
+
+Just like we can **Enable** it, we can also **Disable** it, Drag from the**GetPlayerController** and go for **Disable Input**. Unlink it from the **Target** and connect it with **Player Controller** and let the **Target** remain **Self**. Delete the **Close Door** and connect the **Disable Input** with it.
+
+![GetPlayerControllerDisableInput](images/GetPlayerControllerDisableInput.png)
+
+Now we have our **Input Action Interact**, whenever we press, door needs to be open and pressed again to close the door. We can add a **Flip Flop** for that. For the **A** (that is, when pressed first time) we need to open the door and for **B** (that is when pressed again) we need to close the door.
+
+![FlipFlopDoor](images/FlipFlopDoor.png)
+
+Goto the viewport and add a **TextRender** component.
+
+![AddTextRender](images/AddTextRender.png)
+
+Make the text as **E**, that's the button we are using to interact with. Duplicate it and make sure it is placed on the other side of the door too.
+
+![TextRenderDoorE](images/TextRenderDoorE.png)
+
+Make the texts as children of the door as it won't mess up with the movement of the door. Drag both the Texts under the door to make them as children.
+
+![TextAsChildrenOfDoor](images/TextAsChildrenOfDoor.png)
+
+In the Details panel, enable **Hidden in Game** ✅ in the Rendering. Goto the Event Graph and get the reference of the two texts, because, when our player enters the box and he can interact, we want the texts to be visible. Find **Set Hidden in Game** and connct it with **Enable Input** and both the text should be the targets. Make the **New Hidden** false. Do the same for **Disable Input** but make the **New Hidden** ✅ true here.
+
+![SetHiddenInGame](images/SetHiddenInGame.png)
+
+Go back to the viewport and make the **Box** smaller, so that we can interact only when the player is closer to the door. Compile and Save.
+
+![InteractBox](images/InteractBox.png)
+
+On the User viewport, place the **BPC_Door_Interact** and play to see the result. You can see the text pop up when the player is closer to the door and when you press **E**, it opens and pressed again, it closes.
+
+![TextOnDoorGameView](images/TextOnDoorGameView.png)
 
 ---
 ***KEEP LEARNING***
