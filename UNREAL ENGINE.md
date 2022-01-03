@@ -19,6 +19,7 @@
      - [Opening On Overlap](#opening-on-overlap)
      - [Opening by Interacting with Another Actor](#opening-by-interacting-with-another-actor)
      - [Opening On Interact](#opening-on-interact)
+     - [Opening Using a Blueprint Interface](#opening-using-a-blueprint-interface)
 ---
 
 # UNREAL ENGINE
@@ -707,6 +708,85 @@ Go back to the viewport and make the **Box** smaller, so that we can interact on
 On the User viewport, place the **BPC_Door_Interact** and play to see the result. You can see the text pop up when the player is closer to the door and when you press **E**, it opens and pressed again, it closes.
 
 ![TextOnDoorGameView](images/TextOnDoorGameView.png)
+
+---
+## Opening Using a Blueprint Interface
+
+ -[Toc](#table-of-content)
+
+We will create a Blueprint Interface, which makes it easier to communicate between Actors.
+
+- Create a new child blueprint of door parent
+- Create a new interface
+  - Add the interface to new child
+- Open the door through the player
+  - Create a new sphere trace
+  - Open the door when we are close
+    - Add a retriggarable delay for closing the door automatically again
+
+Goto **Bluprints → FirstPersonTemplate**, in that folder, Right click and goto **Blueprints → Blueprint Interface** and call it **BPI_Interaction**.
+
+![BlueprintInterface](images/BlueprintInterface.png)
+
+Open it up and create a new function named **Interact**.
+
+![CreateNewFunctionInteract](images/CreateNewFunctionInteract.png)
+
+So now we have a function called **Interact** as part of the **BPI_Interface**. We can actually get that logic into door child.
+
+Go back to **Blueprints → Doors** folder and make a new child of the **BP_Door_Parent** and call it **BPC_Door_Interface** and open it up. Now we want to add **Interface** to the actor **BPC_Door_Interface**. You can do that at the **Class Settings**. Click on the **Class Settings** in the toolbar, and in the Details Panel, you can see **Inerfaces** and that would be empty, so you can add an interface. Search for **BPI_Interaction** in it.
+
+![AddBPIInteraction](images/AddBPIInteraction.png)
+
+In the **My Blueprints** tab you can see the **Interact** function just appeared.
+
+![MyBlueprintInteract](images/MyBlueprintInteract.png)
+
+You can now Right click on it and click **Implement Event**. You can see **Event Interact**. We can now use this **Event Interact** to execute the logic that we want. 
+
+Do a **Flip Flop** and put **A** to **Open Door** and **B** to **Close Door**. Compile and Save it.
+
+![EventInteract](images/EventInteract.png)
+
+We will set up the interaction in the **FirstPersonPlayerCharacter**. Goto **Blueprints → FirstPersonTemplate → FirstPersonCharacter** and open it. We need to add our new **Interact** input action. Search for **Interact** and you will get a **Interact Input Action**. When **Pressed**, we will have a look if we are standing infront of something that can be interacted with. Do a **SphereTraceByChannel** from **Pressed**.
+
+![SphereTraceByChannel](images/SphereTraceByChannel.png)
+
+It needs a start and an end point, the trace would draw lines between start and end points in certain radius and look for actors to interact with. The start point in this case could be our **FirstPersonCamera**. Get the camera into the graph and to get it's location, do a **GetWorldLocation** and connect its **Return Value** to the **Start**.
+
+![GetWorldLocation](images/GetWorldLocation.png)
+
+For the **End** point, we can use the **Forward Vector** of the camera so we get the directions that it will look at. Do a **GetForwardVector** from the camera, multiply that with a **float** to detrmine the range at which we can interact with the actors. Then we need to add it back to the original world location. Look for **Vector + Vector** from **GetWorldLocation**. Give a value of 500 units (500 cm) to the float and join the **Vector + Vector** and that to the **End**. Set the **Radius** to 2 in the **SphereTraceByChannel**. Also enable **Draw Debug Type** to **For Duration** and Compile and Save.
+
+![GetForwardVector](images/GetForwardVector.png)
+
+Play and check whether the Trace works or not. Now we just need to interact with an actor. We need to give **Out Hit** results.
+
+![OutHitResults](images/OutHitResults.png)
+
+Go for **Break Hit Result** and extract it down. Add a **Branch** for **Blocking Hit** and connect it with **SphereTraceByChannel**. If did hit something, how does we know that the actor actually have our interaction interface?, there is a function for that we can call, look for **Does Implement Interface** from **Hit Actor**. **Select class** as our **BPI_Interaction** in it's **Interface**.
+
+![BreakHitResult](images/BreakHitResult.png)
+
+If its is True, we can send a **message** using our interface. So make another **Branch** and connect it with **True** of the other **Branch** and connect the **Condition** to the **Does Inplement Interface**. Now call **Interact (message)** from **Hit Actor** and connect it to the **True** of the **Branch**. It sends a message to the actor and if the actor has its interface, it will execute that event that we added.
+
+![InteractMessage](images/InteractMessage.png)
+
+Compile and Save. Now goto the player map and add a new **BPC_Door_Interface** to the player viewport. Have a look whether you can interact with the door and open it. But you can't open the door if you look at it directly, it would open only if you are looking at its frame. It's because the collision on the door is either not set correctly or it's not present. So, goto the **BP_Door_Parent**, selct the **Door** and in the Details panel, Go into the **Static Mesh** and check that the collision is enabled or not by double clicking on the **Mesh**. Enable its **Simple Collision** to see whether there is any collision with it.
+
+![EnableSimpleCollision](images/EnableSimpleCollision.png)
+
+There won't be any collision in the **FirstPersonStarter** Pack for the door. To add Collison, goto **Collision → Add Box Simplified Collision** to get a simplified box collision into the door. Hit Save and go back to Play.
+
+![AddBoxSimplifiedColllision](images/AddBoxSimplifiedColllision.png)
+
+Check whether you can open the door by looking straight to it rather than looking to the frame.
+
+![PlayerScreenInteractWithDoor](images/PlayerScreenInteractWithDoor.png)
+
+Now if its working, you can goto the **FirstPersonPlayerCharacter** Blueprint and set the **Draw Debug Type** to **None**. Comment down everything as **Interact Event - BPI Interface** 
+
+![CommentInteractEvent](images/CommentInteractEvent.png)
 
 ---
 ***KEEP LEARNING***
