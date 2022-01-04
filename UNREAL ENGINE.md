@@ -21,6 +21,7 @@
      - [Opening On Interact](#opening-on-interact)
      - [Opening Using a Blueprint Interface](#opening-using-a-blueprint-interface)
      - [Placing Sounds and Effects in the Level](#placing-sounds-and-effects-in-the-level)
+     - [Playing Sounds and Particles in Blueprints](#playing-sounds-and-particles-in-blueprints)
 ---
 
 # UNREAL ENGINE
@@ -807,6 +808,41 @@ For adding sounds, goto **Content → StarterContent → Audio**, you can see tw
 Place the audio into the screen with the Sparks particle and Play. You can see the sound gradually increaces while you are approaching the particle and diminishing while you are moving away from it.
 
 ![AddSound](images/AddSound.png)
+
+---
+## Playing Sounds and Particles in Blueprints
+
+ -[Toc](#table-of-content)
+
+- Adding Sounds and Particles using Blueprints
+  - Explotion on Ball Projectile
+- Changing the Projectile to be destroyed before self-destruct (So we can use the particle and sound)
+
+Goto **Content → Blueprints → FirstPersonTemplate** folder and select the **BP_FirstPersonProjectile**, which is the ball which our player shoots.
+
+![BPFirstPersonProjectile](images/BPFirstPersonProjectile.png)
+
+You can see that the ball gets destroyed only if we applied impulse somewhere. Now we need to add sounds and particles into it. Just before **Destroy Actor**, Right click and look for **Play Sound at Location**. We already have a **GetActorLocation**, connect it with the **Location**, and connect the **impulse at Location**.
+
+![PlaySoundAtLocation](images/PlaySoundAtLocation.png)
+
+Do the same method to add particles. For particles, do a **Spawn Emitter at Location** node and connect it with location and make it in an order as, after the impulse, we play sound, after the sound, we play the particles and then destroy the actor. Look for **Explosion** in **Sound** as well as in **Emitter Template**.
+
+![SpawnEmitterAtLocation](images/SpawnEmitterAtLocation.png)
+
+Compile and Save to see what happens.
+
+But you can still see the balls rolling around and disappearing. To see thats, goto **Class Settings**, and in **Actor**, you can see that it has a life span of 3 seconds and after that 3 seconds it is destroyed. Reset it to default, it would be 0, so that, it is never being destroyed.
+
+![ActorLifeSpan](images/ActorLifeSpan.png)
+
+But we actually needs the ball to get destroyed. So, what we will do is, just create a **Event BeginPlay**. Then go for a **Delay** and set it's **Duration** to 3 seconds and after the 3 seconds, continue with the logic on sound and particles.
+
+![BeginPlayDelay](images/BeginPlayDelay.png)
+
+Change the **Scale** in  **Spawn Emitter at Location** to **X = 2.5, Y = 2.5 and Z = 2.5** and change the **Veloclity** to 1000. Compile and Save and Play to see the Explosions.
+
+![SpawnScaleAndVelocity](images/SpawnScaleAndVelocity.png)
 
 ---
 ***KEEP LEARNING***
