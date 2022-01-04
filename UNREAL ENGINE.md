@@ -20,6 +20,7 @@
      - [Opening by Interacting with Another Actor](#opening-by-interacting-with-another-actor)
      - [Opening On Interact](#opening-on-interact)
      - [Opening Using a Blueprint Interface](#opening-using-a-blueprint-interface)
+     - [Placing Sounds and Effects in the Level](#placing-sounds-and-effects-in-the-level)
 ---
 
 # UNREAL ENGINE
@@ -787,6 +788,25 @@ Check whether you can open the door by looking straight to it rather than lookin
 Now if its working, you can goto the **FirstPersonPlayerCharacter** Blueprint and set the **Draw Debug Type** to **None**. Comment down everything as **Interact Event - BPI Interface** 
 
 ![CommentInteractEvent](images/CommentInteractEvent.png)
+
+---
+## Placing Sounds and Effects in the Level
+
+ -[Toc](#table-of-content)
+
+How to add extra layers of polish to your work by adding sounds and particle effects to your level.
+
+- Add a steam sound and particle to our level
+
+We can start by adding particles into the scene. Goto **Content → StarterContent → Particles** folder and you can see the starter content particles there. Let's grab one of them and place it in the scene, take **P_Sparks** for spark particles.
+
+For adding sounds, goto **Content → StarterContent → Audio**, you can see two types of files, **Cue** and actual sound files. Usually you want to add a Cue,  because you can do a lot of things in a Cue. For example, open the Fire Sparks Cue. Click on the **Looping Wave Player** and set it to **Looping** in the Details panel.
+
+![LoopingWavePlayer](images/LoopingWavePlayer.png)
+
+Place the audio into the screen with the Sparks particle and Play. You can see the sound gradually increaces while you are approaching the particle and diminishing while you are moving away from it.
+
+![AddSound](images/AddSound.png)
 
 ---
 ***KEEP LEARNING***
