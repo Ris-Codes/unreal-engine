@@ -10,4 +10,5 @@ It is popular among PC and console games with high graphics capabilities and is 
 
 >## Table of Content
 
- - [Blueprints And Gameplay For Game Designers](BlueprintsAndGameplayForGameDesigners.md)
+ - [Blueprints And Gameplay For Game Designers](Blueprints-And-Gameplay-For-Game-Designers.md)
+ - [Becoming an Environment Artist in Unreal](Becoming-an-Environment-Artist-in-Unreal.md)
